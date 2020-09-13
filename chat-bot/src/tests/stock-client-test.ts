@@ -1,5 +1,6 @@
 import { StockClient } from './../stock-client';
 import { assert } from 'chai';
+import { describe, it } from 'mocha';
 import { CSVReader } from '../csv-reader';
 import axios from 'axios';
 
