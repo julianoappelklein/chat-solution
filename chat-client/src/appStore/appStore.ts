@@ -40,6 +40,10 @@ class AppStore {
       alert(data.message);
     });
 
+    chat.onUnexpectedError((data) => {
+      alert(data.message);
+    });
+
     chat.onChatRoomWelcome((data) => {
       this._setState((state) => ({
         ...state,

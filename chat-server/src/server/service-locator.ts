@@ -10,6 +10,8 @@ import { AmqpBotClient } from "../infrastructure/bot-service/amqp-bot-client";
 import { UserOneWayPasswordHashService } from "../infrastructure/user-one-way-password-hash-service";
 import mysql from "mysql";
 import { JWTService } from "./jwt-service";
+import { ConsoleLogger, Logger } from "../infrastructure/logger";
+
 
 class ServiceLocator {
   private _chatRoomRepository: ChatRoomRepository;
@@ -18,20 +20,25 @@ class ServiceLocator {
   private _chatMessageRepository: ChatMessageRepository;
   private _botService: BotService;
   private _jwtService: JWTService;
+  private _logger: Logger;
+  private _mysqlPool: mysql.Pool;
 
   constructor() {
-    const mysqlConn = mysql.createPool({
+    const mysqlPool = mysql.createPool({
       host: "localhost",
       user: "root",
       password: "dev",
       database: "db",
     });
+    this._mysqlPool = mysqlPool;
 
     this._chatRoomRepository = new ChatRoomMockRepository();
-    this._userRepository = new UserMySqlRepository({ mysqlPool: mysqlConn });
+    this._userRepository = new UserMySqlRepository({ mysqlPool: mysqlPool });
     this._chatMessageRepository = new ChatMessageMySqlRepository({
-      mysqlPool: mysqlConn,
+      mysqlPool: mysqlPool,
     });
+
+    this._logger = new ConsoleLogger();
 
     this._jwtService = new JWTService({ hash: "some-fake-hash" });
 
@@ -72,6 +79,14 @@ class ServiceLocator {
 
   getJWTService(): JWTService {
     return this._jwtService;
+  }
+
+  getLogger(): Logger {
+    return this._logger;
+  }
+
+  dispose(){
+    this._mysqlPool.end();
   }
 }
 

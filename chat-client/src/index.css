@@ -71,6 +71,11 @@ input[type=text], input[type=password]{
   border-radius: 3px;
 }
 
+.fill-width{
+  width: 100%;
+  box-sizing: border-box;
+}
+
 label{
   font-size: 0.8em;
 }

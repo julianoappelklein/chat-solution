@@ -11,33 +11,27 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
 
   private messageInputRef = React.createRef<HTMLTextAreaElement>();
   private chatMessagesRef = React.createRef<HTMLDivElement>();
-  private messagesCount = 0;
 
   handleSubmit = (e: React.FormEvent<Element>) => {
     e.preventDefault();
     this.submit();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.tryScroll()
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.tryScroll()
   }
 
-  private tryScroll(){
-    if(this.chatMessagesRef.current){
-      if(this.messagesCount!= appStore.state.loadedMessages.length){
-        this.messagesCount = appStore.state.loadedMessages.length;
-        
-        this.chatMessagesRef.current.scrollTop = this.chatMessagesRef.current.scrollHeight;
-        
-      }
+  private tryScroll() {
+    if (this.chatMessagesRef.current) {
+      this.chatMessagesRef.current.scrollTop = this.chatMessagesRef.current.scrollHeight;
     }
   }
 
-  submit(){
+  submit() {
     const message = this.messageInputRef.current?.value ?? "";
     appStore.sendMessage(message);
     if (this.messageInputRef.current) this.messageInputRef.current.value = "";
@@ -52,12 +46,12 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
     }
   }
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>{
-    if(e.ctrlKey && e.key === "Enter"){
+  handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.ctrlKey && e.key === "Enter") {
       setTimeout(() => {
         this.submit();
       }, 10);
-      
+
     }
   }
 
@@ -81,7 +75,7 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
             <textarea onKeyDown={this.handleKeyDown} ref={this.messageInputRef} onChange={this.handleMessageChange}>
 
             </textarea>
-            <button style={{marginTop: 10}}>Send</button>
+            <button style={{ marginTop: 10 }}>Send</button> <small style={{color: 'gray'}}> as {appStore.state.authenticatedUser}</small>
           </form>
         </div>
 

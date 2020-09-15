@@ -26,6 +26,10 @@ interface OnInvalidMessage {
   message: string;
 }
 
+interface OnUnexpectedError {
+  message: string;
+}
+
 export class ChatAPI {
   private _socket = io({ autoConnect: false, path: "/chat", port: "3001" });
 
@@ -57,6 +61,10 @@ export class ChatAPI {
 
   onChatMessage(handler: (data: OnChatMessage) => void) {
     this._socket.on("chat-message", handler as any);
+  }
+
+  onUnexpectedError(handler: (data: OnUnexpectedError) => void){
+    this._socket.on("unexpected-error", handler as any);
   }
 
   onForceDisconnect(handler: () => void) {

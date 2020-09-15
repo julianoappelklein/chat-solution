@@ -16,4 +16,11 @@ const userRepository = serviceLocator.getUserRepository();
   else{
     console.log(`New users not inserted`);
   }
+  // for(let i = 0; i < 10; i++){
+  //   await new Promise(r => setTimeout(() => r(), i*200),);
+  //   console.log('Try exit 1\n');
+  //   process.exit(0);
+  // }
+  serviceLocator.dispose();
+  
 })();

@@ -9,7 +9,7 @@ export class CSVReader {
         stream
           .pipe(csv())
           .on("data", (data) => results.push(data))
-          .on("error",(ex) =>{
+          .on("error", (ex) => {
             reject(ex);
           })
           .on("end", () => {
