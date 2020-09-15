@@ -5,9 +5,41 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-control-group{
+  margin: 10px 0;
+}
+
+.form-control-group label{
+  display: block;
+}
+
+/* Box utility */
+
+.box{
+  box-shadow: 1px 1px 5px RGBA(0,0,0,.3);
+}
+
+.box-content{
+  padding: 1rem;
+}
+
+.box-title{
+  text-align-last: center;
+  font-size: 1rem!important;
+  display: block;
+  padding: 0.3rem;
+  font-weight: normal;
+  margin: 0;
+  background: RGBA(0,0,0,.03);
+  border-bottom: solid 1px RGBA(0,0,0,.06);
+}
+
+/* Buttons */

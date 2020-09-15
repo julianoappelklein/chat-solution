@@ -1,0 +1,11 @@
+{
+  "tasks": [
+    {
+      "label": "Front-End Up",
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "detail": "react-scripts start"
+    }
+  ]
+}
