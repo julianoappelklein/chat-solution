@@ -1,7 +1,7 @@
-import { IBotCommand, IBotCommandResult } from "../bot-command-runner";
+import { BotCommand, BotCommandExecutor, BotCommandResult } from "../bot-command-router";
 import { StockClient } from "../stock-client";
 
-export class GetStockInfoBotCommand implements IBotCommand {
+export class GetStockInfoBotCommandExecutor implements BotCommandExecutor {
   private _stockMessageMatcher: RegExp = /^\/stock=[a-z0-9.:]+$/i;
   private _stockClient: StockClient;
 
@@ -9,12 +9,12 @@ export class GetStockInfoBotCommand implements IBotCommand {
     this._stockClient = cfg.stockClient;
   }
 
-  match(message: string): boolean {
-    return this._stockMessageMatcher.test(message);
+  match(command: BotCommand): boolean {
+    return typeof(command.data) ==='string' && this._stockMessageMatcher.test(command.data);
   }
 
-  async execute(message: string): Promise<IBotCommandResult> {
-    const stockId = message.split("=").splice(-1)[0];
+  async execute(command: BotCommand): Promise<BotCommandResult> {
+    const stockId = (command.data as String).split("=").splice(-1)[0];
     const result = await this._stockClient.getStockInfo({ stockId: stockId });
     if (result == null) {
       return {

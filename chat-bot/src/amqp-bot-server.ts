@@ -1,5 +1,5 @@
-import amqplib, { Connection, Channel, ConsumeMessage } from "amqplib";
-import { BotCommandRunner } from "./bot-command-runner";
+import amqplib, { Channel } from "amqplib";
+import { BotCommandRouter } from "./bot-command-router";
 
 interface RabbitMQConnectionConfig {
   username: string;
@@ -11,17 +11,17 @@ interface RabbitMQConnectionConfig {
 const CHAT_BOT_QUEUE = "chat_bot_queue";
 const CHAT_BOT_RESPONSE_QUEUE = "chat_bot_response";
 
-export class BotApplication {
+export class AmqpBotServer {
   _connectionConfig: RabbitMQConnectionConfig;
   _newTaskChannel?: Channel;
-  _botCommandRunner: BotCommandRunner;
+  _botCommandRouter: BotCommandRouter;
 
   constructor(config: {
     rabbitMQConnection: RabbitMQConnectionConfig;
-    botCommandRunner: BotCommandRunner;
+    botCommandRouter: BotCommandRouter;
   }) {
     this._connectionConfig = config.rabbitMQConnection;
-    this._botCommandRunner = config.botCommandRunner;
+    this._botCommandRouter = config.botCommandRouter;
   }
 
   async startConsumerConnection(): Promise<void> {
@@ -42,7 +42,8 @@ export class BotApplication {
           if (queueMessage == null) return; //consumer cancelled by RabbitMQ - should be handled
           const message = queueMessage?.content.toString();
           if (message != null) {
-            await this._botCommandRunner.runCommandSafe(message);
+            const result = await this._botCommandRouter.runCommandSafe(message);
+            this._newTaskChannel?.emit(JSON.stringify(result));
           }
           workChannel.ack(queueMessage);
         },

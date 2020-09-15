@@ -1,6 +1,6 @@
-import { BotApplication } from "./bot-application";
-import { BotCommandRunner } from "./bot-command-runner";
-import { GetStockInfoBotCommand } from "./bot-commands/get-stock-info";
+import { AmqpBotServer } from "./amqp-bot-server";
+import { BotCommandRouter } from "./bot-command-router";
+import { GetStockInfoBotCommandExecutor } from "./bot-command-executors/get-stock-info";
 import { StockClient } from "./stock-client";
 import axios from "axios";
 import { CSVReader } from "./csv-reader";
@@ -17,18 +17,18 @@ async function start() {
     csvReader: csvReader,
   });
 
-  const botCommandRunner: BotCommandRunner = new BotCommandRunner({
-    commands: [new GetStockInfoBotCommand({ stockClient: stockClient })],
+  const botCommandRouter: BotCommandRouter = new BotCommandRouter({
+    executors: [new GetStockInfoBotCommandExecutor({ stockClient: stockClient })],
   });
 
-  var botApplication = new BotApplication({
+  var botApplication = new AmqpBotServer({
     rabbitMQConnection: {
       hostname: "localhost",
       password: "password",
       username: "user",
       port: 5672,
     },
-    botCommandRunner: botCommandRunner
+    botCommandRouter: botCommandRouter
   });
 
   await botApplication.start();
