@@ -21,7 +21,12 @@ export class AmqpBotClient implements BotService {
   }
 
   public enqueueCommand(command: BotCommand): void {
-    this._producerChannel?.emit(JSON.stringify(command));
+    if (this._producerChannel == null)
+      throw new Error("Channel is not available");
+    this._producerChannel.sendToQueue(
+      CHAT_BOT_QUEUE,
+      Buffer.from(JSON.stringify(command))
+    );
   }
 
   public setCommandResultHandler(
@@ -48,12 +53,17 @@ export class AmqpBotClient implements BotService {
       consumerChannel.consume(
         CHAT_BOT_RESPONSE_QUEUE,
         async (queueMessage) => {
-          if (queueMessage == null) return; //consumer cancelled by RabbitMQ - should be handled
-          const message = queueMessage?.content.toString();
-          if (message != null) {
-            this._handler?.(JSON.parse(message));
+          try {
+            if (queueMessage == null) return; //consumer cancelled by RabbitMQ - should be handled
+            const message = queueMessage?.content.toString();
+            if (message != null) {
+              this._handler?.(JSON.parse(message));
+            }
+          } catch (e) {
+            console.log(e);
+          } finally {
+            if (queueMessage) consumerChannel.ack(queueMessage);
           }
-          consumerChannel.ack(queueMessage);
         },
         { noAck: false }
       ),

@@ -21,6 +21,6 @@ export class GetStockInfoBotCommandExecutor implements BotCommandExecutor {
         error: { message: "Stock not found.", type: "stock-not-found" },
       };
     }
-    return { data: result };
+    return { data: `${result.Symbol} quote is $${result.Open} per share` };
   }
 }

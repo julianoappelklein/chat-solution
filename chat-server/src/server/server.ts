@@ -3,8 +3,12 @@ import httpProxy from "express-http-proxy";
 import { join, resolve } from "path";
 import { router } from "./express-router";
 import io from "socket.io";
-import { setupSocketsServer } from "./sockets-server";
+import { setupSocketsServer } from "./sockets-server/sockets-server";
 import bodyParser from 'body-parser';
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ', err);
+});
 
 const production = false;
 

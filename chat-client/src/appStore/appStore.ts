@@ -8,29 +8,86 @@ interface Listener {
 }
 
 class AppStore {
-  private _state: AppState = {
+  state: AppState = {
     view: { name: "login" },
     availableChatRooms: [],
     loadedMessages: [],
+    authenticatedUser: null,
   };
   private _listeners: Array<Listener> = [];
   private _chatAPI = new ChatAPI();
   private _authenticationAPI = new AuthenticationAPI();
 
   constructor() {
-    this._chatAPI.onWelcome((data) => {
-      alert("Welcome!");
+    //listening to chat events
+    const chat = this._chatAPI;
+
+    chat.onWelcome((data) => {
+      this._setState((state) => ({
+        ...state,
+        availableChatRooms: data.chatRooms,
+      }));
     });
+
+    chat.onChatMessage((data) => {
+      this._setState((state) => ({
+        ...state,
+        loadedMessages: [...state.loadedMessages, ...[data]].slice(-50),
+      }));
+    });
+
+    chat.onInvalidMessage((data) => {
+      alert(data.message);
+    });
+
+    chat.onChatRoomWelcome((data) => {
+      this._setState((state) => ({
+        ...state,
+        loadedMessages: data.messages,
+        currentRoomName: data.room,
+        view: {
+          name: "chat",
+        },
+      }));
+    });
+
+    chat.onForceDisconnect(() => {
+      this._setState((state) => ({
+        ...state,
+        view: {
+          name: "login",
+        },
+        authenticatedUser: null,
+      }));
+      localStorage.removeItem("token");
+    });
+
+    const token = window.localStorage.getItem("token");
+    if (token != null) {
+      try {
+        const userData = JSON.parse(atob(token.split(".")[1]));
+        this._chatAPI.connect();
+        this._setState((state) => ({
+          ...state,
+          authenticatedUser: userData.username,
+          view: {
+            name: "chats",
+          },
+        }));
+      } catch (e) {
+        window.localStorage.removeItem("token");
+      }
+    }
   }
 
-  //listeners
-  private _changeState(fn: (appState: AppState) => AppState) {
-    this._state = fn(this._state);
+  private _setState(fn: (appState: AppState) => AppState) {
+    this.state = fn(this.state);
     this._listeners.forEach((l) => {
       l.setState({});
     });
   }
 
+  // listeners registration
   addListener(listener: Listener): void {
     const index = this._listeners.indexOf(listener);
     if (index === -1) this._listeners.push(listener);
@@ -41,22 +98,9 @@ class AppStore {
     this._listeners = this._listeners.filter((x) => x !== listener);
   }
 
-  //authentication
-
-  async authenticate(data: {
-    username: string;
-    password: string;
-  }): Promise<void> {
-    const result = await this._authenticationAPI.authenticate(data);
-    if (result != null) {
-      this._chatAPI.connect();
-      this.setView({ name: "chats" });
-    }
-  }
-
-  //routing
+  // ROUTING
   setView(view: AppView): void {
-    this._changeState((state) => {
+    this._setState((state) => {
       return {
         ...state,
         view,
@@ -65,10 +109,47 @@ class AppStore {
   }
 
   getView(): AppView {
-    return this._state.view;
+    return this.state.view;
   }
 
+  // ACTIONS
+
   //chat
+  sendMessage(message: string) {
+    this._chatAPI.emitChatMessage({ message });
+  }
+
+  joinChatRoom(room: string) {
+    this._chatAPI.emitJoinChatRoom({ room });
+  }
+
+  //authentication
+  async signOut(){
+    this._chatAPI.disconnect();
+    this._setState((state) => ({
+      ...state,
+      view: { name: "login" },
+      authenticatedUser: null,
+    }));
+  }
+
+  async authenticate(data: {
+    username: string;
+    password: string;
+  }): Promise<void> {
+    const token = await this._authenticationAPI.authenticate(data);
+    if (token != null) {
+      this._chatAPI.connect();
+      localStorage.setItem("token", token);
+      this._setState((state) => ({
+        ...state,
+        view: { name: "chats" },
+        authenticatedUser: data.username,
+      }));
+    } else {
+      alert("Credentials does not match.");
+    }
+  }
 }
 
 export const appStore = new AppStore();

@@ -1,17 +1,31 @@
-
 interface ChatMessageModelData{
   id?: number;
-  userId: string;
+  username: string;
   chatRoomId: string;
   message: string;
   createdOn: Date;
 }
 
 export class ChatMessageModel{
-  _data: ChatMessageModelData;
+  private _data: ChatMessageModelData;
+
+  getData(){
+    return this._data;
+  }
+  
   constructor(data: ChatMessageModelData){
     this._data = data;
   }
 
-  
+  getUsername(){
+    return this._data.username;
+  }
+
+  getMessage(){
+    return this._data.message;
+  }
+
+  getCreatedOn(){
+    return this._data.createdOn;
+  }
 }

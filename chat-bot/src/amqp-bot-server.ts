@@ -43,7 +43,7 @@ export class AmqpBotServer {
           const message = queueMessage?.content.toString();
           if (message != null) {
             const result = await this._botCommandRouter.runCommandSafe(message);
-            this._newTaskChannel?.emit(JSON.stringify(result));
+            this._newTaskChannel?.sendToQueue(CHAT_BOT_RESPONSE_QUEUE, Buffer.from(JSON.stringify(result)));
           }
           workChannel.ack(queueMessage);
         },

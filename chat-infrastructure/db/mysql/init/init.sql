@@ -1,6 +1,6 @@
 CREATE TABLE `db`.`chat_message` (
-    `id` BIGINT NOT NULL,
-    `user_id` VARCHAR(36) NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(30) NOT NULL,
     `chat_room_id` VARCHAR(20) NOT NULL,
     `message` VARCHAR(500) NOT NULL,
     `created_on` DATETIME NOT NULL,

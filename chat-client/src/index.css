@@ -14,7 +14,7 @@ code {
 }
 
 .form-control-group{
-  margin: 10px 0;
+  margin: 0.5rem 0;
 }
 
 .form-control-group label{
@@ -42,4 +42,48 @@ code {
   border-bottom: solid 1px RGBA(0,0,0,.06);
 }
 
+.box-list{
+  padding: 0;
+  margin: 0.5rem 0;
+}
+.box-list > li{
+  padding: 0;
+  margin: 3px 0;
+  list-style-type: none;
+  border: solid 1px RGBA(0,0,0, .1);
+}
+.box-list > li > a{
+  color: black;
+  display: block;
+  padding: 0.5rem;
+  cursor: pointer  
+}
+.box-list > li > a:hover{
+  background-color: RGBA(0,0,0, .1);
+  display: block;
+}
+
 /* Buttons */
+
+input[type=text], input[type=password]{
+  padding: 0.5em;
+  border: solid 1px gray;
+  border-radius: 3px;
+}
+
+label{
+  font-size: 0.8em;
+}
+
+button{
+  background: #2196f3;
+  color: white;
+  border: solid 1px #2196f3;
+  padding: 0.5em;
+  border-radius: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+button:hover{
+  border-color: black;
+}

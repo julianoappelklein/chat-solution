@@ -1,5 +1,8 @@
+import { Request, Response } from "express";
+import { Schema } from "joi";
+
 export const jsonResponse = (
-  res: any,
+  res: Response,
   data: any,
   options?: { statusCode: number }
 ) => {
@@ -8,4 +11,21 @@ export const jsonResponse = (
   res.setHeader("Content-Type", "application/json");
   res.write(data != null ? JSON.stringify(data) : "null");
   res.end();
+};
+
+export const validateRequestBodyData = (
+  req: Request,
+  res: Response,
+  schema: Schema
+) => {
+  const result = schema.validate(req.body, {});
+  if (result.error) {
+    res.status(422).json({
+      status: "error",
+      message: "Invalid request data",
+      data: req.body,
+    });
+    return false;
+  }
+  return true;
 };

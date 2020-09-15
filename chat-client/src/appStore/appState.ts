@@ -7,13 +7,13 @@ export interface ChatMessage {
 }
 
 export interface ChatRoom {
-  name: string;
+  id: string;
   description: string;
 }
 
 export interface AppState {
   view: AppView;
-  authenticatedUser?: string;
+  authenticatedUser: string | null;
   loadedMessages: ChatMessage[] ;
   currentRoomName?: string;
   availableChatRooms: ChatRoom[];
