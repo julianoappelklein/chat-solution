@@ -1,0 +1,11 @@
+{
+  "tasks": [
+    {
+      "label": "Ensure Test Data",
+      "type": "npm",
+      "script": "create-test-data",
+      "problemMatcher": [],
+      "detail": "Insert users in MySql"
+    }
+  ]
+}

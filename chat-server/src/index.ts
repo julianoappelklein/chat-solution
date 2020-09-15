@@ -1,5 +1,3 @@
-console.log("Init");
+import { start } from "./server/server";
 
-export default function Hello(){
-  console.log("Hello");
-}
+start();
