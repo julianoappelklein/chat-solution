@@ -20,7 +20,8 @@ To simplify the installation process, open your console on ./chat-solution-start
 
 npm run up-infrastructure
 
-# if you had problems running the command above, try "npm run up-infrastructure-sudo" - I had to use sudo permission on Ubuntu
+# if you had problems running the command above, try "npm run up-infrastructure-sudo"
+# I needed sudo permission on Ubuntu
 
 # now you'll need to open a new console to run the following command
 # it will take a while too. I hope you have saved some coffee.
