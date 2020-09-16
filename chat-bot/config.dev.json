@@ -1,0 +1,8 @@
+{
+  "rabbitMQConnection": {
+    "hostname": "localhost",
+    "password": "password",
+    "username": "user",
+    "port": 5672
+  }
+}

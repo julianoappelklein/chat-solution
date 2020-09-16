@@ -1,0 +1,14 @@
+{
+  "rabbitMQConnection": {
+    "hostname": "localhost",
+    "password": "password",
+    "username": "user",
+    "port": 5672
+  },
+  "mysqlConnection": {
+    "host": "localhost",
+    "user": "root",
+    "password": "dev",
+    "database": "db"
+  }
+}

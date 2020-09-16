@@ -8,10 +8,10 @@ import { ChatMessageMySqlRepository } from "../infrastructure/repositories/chat-
 import { BotService } from "../infrastructure/bot-service/bot-service";
 import { AmqpBotClient } from "../infrastructure/bot-service/amqp-bot-client";
 import { UserOneWayPasswordHashService } from "../infrastructure/user-one-way-password-hash-service";
-import mysql from "mysql";
+import mysql, { ConnectionConfig } from "mysql";
 import { JWTService } from "./jwt-service";
 import { ConsoleLogger, Logger } from "../infrastructure/logger";
-
+import { parseConfig, Config } from "./config";
 
 class ServiceLocator {
   private _chatRoomRepository: ChatRoomRepository;
@@ -22,14 +22,12 @@ class ServiceLocator {
   private _jwtService: JWTService;
   private _logger: Logger;
   private _mysqlPool: mysql.Pool;
+  private _config: Config;
 
   constructor() {
-    const mysqlPool = mysql.createPool({
-      host: "localhost",
-      user: "root",
-      password: "dev",
-      database: "db",
-    });
+    const config = parseConfig();
+    this._config = config;
+    const mysqlPool = mysql.createPool(config.mysqlConnection);
     this._mysqlPool = mysqlPool;
 
     this._chatRoomRepository = new ChatRoomMockRepository();
@@ -48,12 +46,7 @@ class ServiceLocator {
     });
 
     this._botService = new AmqpBotClient({
-      rabbitMQConnection: {
-        hostname: "localhost",
-        password: "password",
-        username: "user",
-        port: 5672,
-      },
+      rabbitMQConnection: config.rabbitMQConnection,
     });
   }
 
@@ -85,7 +78,11 @@ class ServiceLocator {
     return this._logger;
   }
 
-  dispose(){
+  getConfig() : Config {
+    return this._config;
+  }
+
+  dispose() {
     this._mysqlPool.end();
   }
 }

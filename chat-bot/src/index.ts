@@ -4,8 +4,12 @@ import { GetStockInfoBotCommandExecutor } from "./bot-command-executors/get-stoc
 import { StockClient } from "./stock-client";
 import axios from "axios";
 import { CSVReader } from "./csv-reader";
+import { parseConfig } from "./config";
 
 async function start() {
+
+  const config = parseConfig()
+
   const axiosClient = axios.create({
     timeout: 1000,
   });
@@ -22,12 +26,7 @@ async function start() {
   });
 
   var botApplication = new AmqpBotServer({
-    rabbitMQConnection: {
-      hostname: "localhost",
-      password: "password",
-      username: "user",
-      port: 5672,
-    },
+    rabbitMQConnection: config.rabbitMQConnection,
     botCommandRouter: botCommandRouter
   });
 

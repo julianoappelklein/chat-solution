@@ -55,6 +55,15 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
     }
   }
 
+  private padZ(v: any, l: number){
+    return (v.toString() as String).padStart(l,"0");
+  }
+
+  private formatDate(date: any){
+    const dateObj: Date = typeof date === "string" ? new Date(date) : date;
+    return `${this.padZ(dateObj.getHours(), 2)}:${this.padZ(dateObj.getMinutes(),2)} (${this.padZ(dateObj.getDate(),2)}-${this.padZ(dateObj.getMonth(),2)})`;
+  }
+
   render() {
     return (
       <div className="Chat-container">
@@ -65,7 +74,7 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
               <div className="Chat-message-content">
                 <div className="Chat-message-label">{x.username}</div>
                 <div className="Chat-message-body">{x.message}</div>
-                <div className="Chat-message-timestamp">{new Date(x.timestamp).toISOString().replace(/T|[:][^:]+$/g, ' ')}</div>
+                <div className="Chat-message-timestamp">{this.formatDate(x.timestamp)}</div>
               </div>
             </div>
           ))}

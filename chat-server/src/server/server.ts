@@ -5,12 +5,13 @@ import { router } from "./express-router";
 import io from "socket.io";
 import { setupSocketsServer } from "./sockets-server/sockets-server";
 import bodyParser from 'body-parser';
+import { serviceLocator } from "./service-locator";
 
 process.on('uncaughtException', function (err) {
   console.log('Caught exception: ', err);
 });
 
-const production = false;
+const config = serviceLocator.getConfig();
 
 export const start = () => {
   //start Express
@@ -22,10 +23,11 @@ export const start = () => {
     res.send('Chat Server API');
   });
   app.use("/api", router);
-  if (!production) {
+
+  if (!config.chatServerClientPath) {
     app.use("/", httpProxy("http://localhost:3000"));
   } else {
-    const spaFrontendRoot = join(__dirname, "../chat-client/build");
+    const spaFrontendRoot = join(__dirname, "../../chat-client/build");
     app.use(express.static(spaFrontendRoot));
     app.use((err: any, req: any, res: any, next: any) => {
       console.error(err.stack)

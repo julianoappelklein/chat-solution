@@ -9,7 +9,7 @@ export class Chats extends React.Component<{}, {}>{
 
   render() {
     return (<div className="box" style={{ minWidth: '300px', maxWidth: '90vw' }}>
-      <h1 className="box-title">Available Chat Rooms</h1>
+      <h1 className="box-title">Chat Rooms</h1>
       <div className="box-content">
         <ul className="box-list">
           {appStore.state.availableChatRooms.map(x => (
