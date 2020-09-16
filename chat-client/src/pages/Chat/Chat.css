@@ -17,8 +17,11 @@
 .Chat-message{
   margin: 20px 0;
 }
-.Chat-message:first-child, .Chat-message:last-child{
-  margin: 0;
+.Chat-message:first-child{
+  margin-top: 0;
+}
+.Chat-message:last-child{
+  margin-bottom: 0;
 }
 
 .Chat-message .Chat-message-content{
