@@ -1,5 +1,7 @@
 # Jobsity Node Chat Challenge
 
+**All required features and bonus were implemented.**
+
 ## Running
 
 ### Requirements
