@@ -32,9 +32,9 @@ async function start() {
   });
 
   await botApplication.start();
-  console.log("Service started");
+  console.log("Chat Bot Server started");
 };
 
 start().catch(ex =>{
-  console.error("Failed to start bot server", ex);
+  console.error("Failed to start Chat Bot Server", ex);
 });

@@ -72,7 +72,7 @@ export class Chat extends React.Component<{}, { isCommand: boolean }>{
         </div>
         <div className={`Chat-input ${this.state.isCommand ? "Chat-input-command" : ""}`}>
           <form onSubmit={this.handleSubmit}>
-            <textarea onKeyDown={this.handleKeyDown} ref={this.messageInputRef} onChange={this.handleMessageChange}>
+            <textarea placeholder="Press CTRL + Enter to send your message" onKeyDown={this.handleKeyDown} ref={this.messageInputRef} onChange={this.handleMessageChange}>
 
             </textarea>
             <button style={{ marginTop: 10 }}>Send</button> <small style={{color: 'gray'}}> as {appStore.state.authenticatedUser}</small>

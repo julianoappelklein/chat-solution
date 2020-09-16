@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "chat-infrastructure"
+		},
+		{
+			"path": "chat-solution-starter"
 		}
 	],
 	"settings": {

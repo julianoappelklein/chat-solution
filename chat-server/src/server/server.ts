@@ -17,6 +17,10 @@ export const start = () => {
   const app = express();
 
   app.use(bodyParser.json());
+  app.get("/api", (req, res, next) => {
+    res.statusCode = 200;
+    res.send('Chat Server API');
+  });
   app.use("/api", router);
   if (!production) {
     app.use("/", httpProxy("http://localhost:3000"));
@@ -33,6 +37,7 @@ export const start = () => {
     });
   }
   
+  
   app.use(function (err: any, req: any, res: any, next: any) {
     console.error(err.stack)
     res.status(500).send('Something broke!')
@@ -45,4 +50,6 @@ export const start = () => {
   }).attach(server);
 
   setupSocketsServer(ioServer);
+
+  console.log("Chat Server Started");
 };
