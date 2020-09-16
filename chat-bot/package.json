@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node ./build/index.js",
+    "start": "tsc && node ./build/index.js",
     "build": "tsc",
-    "test": "mocha -r ts-node/register src/**/*-test.ts",
-    "build-and-start": "npm run build && npm run start"
+    "test": "mocha -r ts-node/register src/**/*-test.ts"
   },
   "author": "",
   "license": "ISC",

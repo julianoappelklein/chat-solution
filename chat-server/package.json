@@ -7,8 +7,7 @@
     "start": "tsc && node build/index.js",
     "build": "tsc",
     "test": "mocha -r ts-node/register src/**/*-test.ts",
-    "create-test-data": "node build/scripts/create-test-users.js",
-    "build-and-start": "npm run build && npm run start"
+    "create-test-data": "tsc && node build/scripts/create-test-users.js"
   },
   "author": "",
   "license": "ISC",

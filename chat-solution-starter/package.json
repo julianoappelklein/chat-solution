@@ -8,9 +8,9 @@
     "up-infrastructure-sudo": "cd ../chat-infrastructure && sudo docker-compose up",
     "install-projects": "npm install && cd ../chat-bot && npm install && cd ../chat-server && npm install && npm run create-test-data && cd ../chat-client && npm install && echo '' && echo PROJECTS INSTALLATION COMPLETED ",
     "start-projects": "concurrently \"wait-on http://localhost:3001/api && npm run start-chat-client\" \"npm run start-chat-server\" \"npm run start-chat-bot\" ",
-    "start-chat-bot": "cd ../chat-bot && npm run build-and-start",
+    "start-chat-bot": "cd ../chat-bot && npm run start",
     "start-chat-client": "cd ../chat-client && npm run start",
-    "start-chat-server": "cd ../chat-server && npm run build-and-start",
+    "start-chat-server": "cd ../chat-server && npm run start",
     "install-and-start-projects": "npm run install-projects && npm run start-projects"
   },
   "devDependencies": {
