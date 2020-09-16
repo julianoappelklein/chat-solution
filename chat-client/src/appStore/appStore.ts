@@ -130,6 +130,7 @@ class AppStore {
   //authentication
   async signOut(){
     this._chatAPI.disconnect();
+    localStorage.removeItem("token");
     this._setState((state) => ({
       ...state,
       view: { name: "login" },
